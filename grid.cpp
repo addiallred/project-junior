@@ -13,95 +13,100 @@
 //	Feel free to include any other C++ standard library if necessary.
 
 using namespace std;
-int memoize(int N, vector<vector<string> > G, vector<vector<int> > I){
-	I[0][0] = 2;
+int memoize(int N, vector<vector<string> > G, vector<vector<string> >Gpass, vector<vector<int> > I){
+	
+	I[0][0] = std::stoi(G[0][0]);
 	for(int i = 1; i < N; i++){
 		int x = std::stoi(G[0][i]);
-		cout << x << endl;
 		int tots = I[0][i-1] + x;
-		cout << tots << endl;
 		if(tots < I[0][i-1]){
 			I[0][i] = tots;
 		}
 		else{
 			I[0][i] = I[0][i-1];
 		}
+		G[0][i] = std::to_string(std::stoi(G[0][i-1]) + x);
 		
 	}
 	for(int i = 1; i < N; i++){
 		int x = std::stoi(G[i][0]);
-		cout << x << endl;
 		int tots = I[i-1][0] + x;
-		cout << tots << endl;
 		if(tots < I[i-1][0]){
 			I[i][0] = tots;
 		}
 		else{
 			I[i][0] = I[i-1][0];
 		}
-		
+		G[i][0] = std::to_string(std::stoi(G[i-1][0]) + x);
+		//cout << "this is g at " << i << " " << 0 << G[i][0] << endl;
 	}
 	for(int i = 1; i < N; i++){
 		for(int j = 1; j < N; j++){
+			int x = std::stoi(Gpass[i][j]);
+			G[i][j] = std::to_string(max(std::stoi(G[i-1][j]) + x, std::stoi(G[i][j-1]) + x));
+		}
+	}
+	for(int i = 1; i < N; i++){
+		for(int j = 1; j < N; j++){
+			int x = std::stoi(Gpass[i][j]); 
+			if(std::stoi(G[i][j]) < 0){
+				cout << x + I[i-1][j] << " above " << x + I[i][j-1] << " to right"  << endl;
+				I[i][j] = std::max(x + I[i-1][j], x + I[i][j-1]);
+			}
+			else{
+				I[i][j] = std::max(I[i-1][j], I[i][j-1]);
+			}
+		}
+	}
+	/*for(int i = 1; i < N; i++){
+		for(int j = 1; j < N; j++){
 			int x = std::stoi(G[i][j]);
-			cout << x << " - this is the value at " << i << " " << j << endl;
+			cout << "This is x " << x << endl;
+			
 			if(std::stoi(G[i-1][j]) + x > 0 && std::stoi(G[i][j-1]) + x > 0)//handle edge case when it is 0
 			{
-				I[i][j] = std::max(I[i-1][j], I[i][j-1]);
+				if(std::stoi(G[i-1][j]) + x <  std::stoi(G[i][j-1]) + x ){
+					I[i][j] = I[i-1][j];
+					G[i][j] = std::to_string(std::stoi(G[i-1][j]) + x);
+				}
+				else{
+					I[i][j] = I[i][j-1];
+					G[i][j] = std::to_string(std::stoi(G[i][j-1]) + x);
+				}
 			}
 			else if(std::stoi(G[i-1][j]) + x > 0){
 				I[i][j] = I[i-1][j];
-				G[i][j] = std::stoi(G[i-1][j]) + x > 0
+				G[i][j] = std::to_string(std::stoi(G[i-1][j]) + x);
 			}
 			else if(std::stoi(G[i][j-1]) + x > 0){
 				I[i][j] = I[i][j-1];
+				G[i][j] = std::to_string(std::stoi(G[i][j-1]) + x);
 			}
 			else{
-				int tots = std::max(I[i-1][j] + x, I[i][j-1] + x);
-				I[i][j] = tots;
+				if(I[i-1][j] + x < I[i][j-1] + x){
+					I[i][j] = I[i][j-1] + x;
+					G[i][j] = std::to_string(std::stoi(G[i][j-1]) + x);
+				}
+				else{
+					I[i][j] = I[i-1][j] + x;
+					G[i][j] = std::to_string(std::stoi(G[i-1][j]) + x);	
+				}
+			
 			}
 			
 		}
-	}
+	}*/
+	cout << "Matrix G" << endl;
 	for(int i = 0; i < N; i++){
 		for(int j = 0; j < N; j++){
-			cout << I[i][j] << " - this is the value at " << i << " " << j << endl;
+			cout << G[i][j] << "   ";
 		}
+		cout << endl;
 	}
 	return I[N-1][N-1];
 }
-//	You can add any custom classes / helper functions here.
-int recursive(int N, vector<vector<string> > G, int x, int i, int j, int result){
-	if(j >= N){
-		return x;
-	}
-	if(i >= N){
-		return x;
-	}
-	cout << G[i][j] << endl;
-	if(i == N-1 && j == N-1){
-		if(x + std::stoi(G[i][j]) < x){
-			x = x + std::stoi(G[i][j]);
-		}
-		cout << "x result: " << x << endl;
-		return x;
-	}
-	else{
-		if(x + std::stoi(G[i][j]) < x){
-			x = x + std::stoi(G[i][j]);
-		}
-		int current = recursive(N, G, x, i, j+1, result);
-		int next_current = recursive(N, G, x, i+1, j, result);
-		int temp = std::min(current, next_current);
-		if(temp > x){
-			x = temp;
-		}
-		cout << current << endl;
-		cout << next_current << endl;
-		cout << "x value for " << i << " " << j << " x: " << x << endl;
-		return x;
-	}
-}
+
+
 int solve(int N, vector<vector<string> > G) {
 /*
 	Please complete this function.
@@ -129,8 +134,6 @@ int main(int argc, char **argv) {
 			G[i].push_back(tmp);
 		}
 	}
-	int result = 1000000;
-	int start = std::stoi(G[0][0]);
 	vector<vector<int> > I;
 	I.resize(N);
 	for(int i = 0; i < N; i++){
@@ -140,8 +143,14 @@ int main(int argc, char **argv) {
 	}
 	 //int result2 = recursive(N, G, I);
 	 //cout << "Result " << result2 << endl;
-	 int res = memoize(N, G, I);
-	 cout << res << endl;
+	int res = memoize(N, G, G, I);
+	if(res >= 0){
+		cout << "Lives needed = 1" << endl;
+	}
+	else{
+		res = (res*-1) + 1;
+		cout << "Lives needed = " << res << endl;
+	}
 	//cout << solve(N, G) << endl;
 	return 0;
 }
