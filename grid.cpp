@@ -104,7 +104,16 @@ int memoize(int N, vector<vector<string> > G, vector<vector<string> >Gpass, vect
 		cout << endl;
 	}
 	return I[N-1][N-1];
+	cout << "Matrix I" << endl;
+	for(int i = 0; i < N; i++){
+		for(int j = 0; j < N; j++){
+			cout << I[i][j] << "   ";
+		}
+		cout << endl;
+	}
+	return I[N-1][N-1];
 }
+
 
 
 int solve(int N, vector<vector<string> > G) {
