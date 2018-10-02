@@ -253,41 +253,7 @@ int memoize(int N, vector<vector<string> > G, vector<vector<int> > I, vector<vec
 
 		}
 	}
-	cout << "D: " << endl;
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < N; j++){
-			cout << doubleP[i][j] << " ";
-		}
-		cout << endl;
-	}
-	cout << "I: " << endl;
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < N; j++){
-			cout << I[i][j] << " ";
-		}
-		cout << endl;
-	}
-	cout << "P: " << endl;
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < N; j++){
-			cout << protection[i][j] << " ";
-		}
-		cout << endl;
-	}
 	return I[0][0];
-}
-
-
-int solve(int N, vector<vector<string> > G) {
-/*
-	Please complete this function.
-	N: Number of rows / columns of the grid.
-	G: A 2d vector (N*N) indicating the grid.
-		G[0][0] is the top left corner
-		G[N-1][N-1] is the bottom right corner
-	Return: the minimum life Brain needs to complete his task.
-*/
-	return 0;
 }
 
 //	The main function reads the input and outputs your answer.
@@ -318,10 +284,9 @@ int main(int argc, char **argv) {
 			protection[i].push_back(0);
 		}
 	}
-	 //int result2 = recursive(N, G, I);
-	 //cout << "Result " << result2 << endl;
+	
 	int res = memoize(N, G,I, doubleP, protection);
-	cout << "Lives needed: " << res << endl;
-	//cout << solve(N, G) << endl;
+	cout << res << endl;
+	
 	return 0;
 }
